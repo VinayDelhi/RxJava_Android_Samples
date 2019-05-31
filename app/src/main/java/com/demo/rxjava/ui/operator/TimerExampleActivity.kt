@@ -55,7 +55,7 @@ class TimerExampleActivity : AppCompatActivity() {
 
     }
 
-    fun getObservable(): Observable<Long>{
+    private fun getObservable(): Observable<Long>{
         return Observable.timer(2, TimeUnit.SECONDS)
     }
 
@@ -80,9 +80,9 @@ class TimerExampleActivity : AppCompatActivity() {
             }
 
             override fun onError(e: Throwable) {
-                textView.append(" onError : " + e.message)
+                textView.append(" onError : ${e.message}")
                 textView.append(AppConstant.LINE_SEPARATOR)
-                Log.d(TAG, " onError : " + e.message)
+                Log.d(TAG, " onError : ${e.message}")
             }
 
             override fun onComplete() {

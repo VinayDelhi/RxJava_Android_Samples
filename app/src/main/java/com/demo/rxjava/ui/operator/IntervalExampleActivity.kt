@@ -44,7 +44,7 @@ class IntervalExampleActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        compositeDisposable.dispose()
+        //compositeDisposable.dispose()
     }
 
     override fun onStop() {
@@ -60,16 +60,54 @@ class IntervalExampleActivity : AppCompatActivity() {
 
         compositeDisposable = CompositeDisposable()
 
-        val disposable =Observable.interval(0,2, TimeUnit.SECONDS)
+         val disposable =Observable.interval(0,2, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(getObserver())
 
-        // compositeDisposable added DisposableObserver type observer
-        compositeDisposable.add(getObserver())
+         //compositeDisposable added DisposableObserver type observer
+          //compositeDisposable.add(disposable)
     }
 
-    private fun getObserver(): DisposableObserver<Long>{
+    private fun getObserver(): Observer<Long>{
+
+        return object : Observer<Long>{
+            override fun onSubscribe(d: Disposable) {
+
+                textView.append("onNext() : ${d.isDisposed}")
+                textView.append(AppConstant.LINE_SEPARATOR)
+            }
+
+            override fun onNext(value: Long) {
+
+                textView.append("onNext()")
+                textView.append(AppConstant.LINE_SEPARATOR)
+                textView.append("value : $value")
+                textView.append(AppConstant.LINE_SEPARATOR)
+
+                Log.d(MapExampleActivity.TAG, "onNext : $value")
+            }
+
+            override fun onError(e: Throwable) {
+                textView.append("onError : ${e.message}")
+                textView.append(AppConstant.LINE_SEPARATOR)
+
+                Toast.makeText(this@IntervalExampleActivity, "Interval operator", Toast.LENGTH_SHORT).show()
+
+                Log.d(MapExampleActivity.TAG, "onError : ${e.message}")
+            }
+
+            override fun onComplete() {
+                textView.append("onComplete")
+                textView.append(AppConstant.LINE_SEPARATOR)
+
+                Log.d(MapExampleActivity.TAG, "onComplete")
+            }
+
+        }
+    }
+
+    private fun getDisposableObserver(): DisposableObserver<Long>{
 
         return object : DisposableObserver<Long>(){
 
