@@ -59,8 +59,16 @@ class CompositeDisposableExampleActivity : AppCompatActivity() {
                 val disposable = ApiService.getUserListObservable()
                                             .subscribeOn(Schedulers.io())
                                             .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(getObserver())
-        //compositeDisposable.add(disposable)
+                                            .subscribe{list ->
+
+                                                for(user in list){
+
+                                                    textView.append("${user.firstname}")
+                                                    textView.append(AppConstant.LINE_SEPARATOR)
+                                                }
+
+                                            }
+        compositeDisposable.add(disposable)
     }
 
 

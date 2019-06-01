@@ -52,11 +52,17 @@ class DisposableExampleActivity : AppCompatActivity() {
 
     private fun doSomeWork(){
 
-            /*disposable = ApiService.getUserListObservable()
+            disposable = ApiService.getUserListObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getObserver())
-*/
+                .subscribe{list ->
+
+                    for(user in list){
+
+                        textView.append(user.firstname)
+                        textView.append(AppConstant.LINE_SEPARATOR)
+                    }
+                }
     }
 
 

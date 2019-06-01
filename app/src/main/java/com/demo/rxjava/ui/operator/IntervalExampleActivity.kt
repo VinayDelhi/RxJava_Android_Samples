@@ -49,7 +49,7 @@ class IntervalExampleActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
     }
 
     override fun onDestroy() {
@@ -63,10 +63,14 @@ class IntervalExampleActivity : AppCompatActivity() {
          val disposable =Observable.interval(0,2, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(getObserver())
+            .subscribe{value ->
+
+                textView.append("value : $value")
+                textView.append(AppConstant.LINE_SEPARATOR)
+            }
 
          //compositeDisposable added DisposableObserver type observer
-          //compositeDisposable.add(disposable)
+          compositeDisposable.add(disposable)
     }
 
     private fun getObserver(): Observer<Long>{
