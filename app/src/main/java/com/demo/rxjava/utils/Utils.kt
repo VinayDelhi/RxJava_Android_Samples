@@ -93,4 +93,23 @@ object Utils {
         return userList;
 
     }
+
+    fun logError(TAG: String, e: Throwable) {
+        if (e is ANError) {
+            if (e.errorCode != 0) {
+                // received ANError from server
+                // error.getErrorCode() - the ANError code from server
+                // error.getErrorBody() - the ANError body from server
+                // error.getErrorDetail() - just a ANError detail
+                Log.d(TAG, "onError errorCode : " + e.errorCode)
+                Log.d(TAG, "onError errorBody : " + e.errorBody)
+                Log.d(TAG, "onError errorDetail : " + e.errorDetail)
+            } else {
+                // error.getErrorDetail() : connectionError, parseError, requestCancelledError
+                Log.d(TAG, "onError errorDetail : " + e.errorDetail)
+            }
+        } else {
+            Log.d(TAG, "onError errorMessage : " + e.message)
+        }
+    }
 }
